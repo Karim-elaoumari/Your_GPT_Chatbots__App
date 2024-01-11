@@ -21,7 +21,7 @@ spring:
     show-sql: true
     hibernate:
       dialect: org.hibernate.dialect.MySQL5Dialect
-      ddl-auto: update
+      ddl-auto: create
   security:
     oauth2:
       resourceserver:

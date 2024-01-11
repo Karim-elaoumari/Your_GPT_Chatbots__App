@@ -1,5 +1,6 @@
 package com.chatbots.security;
 
+import com.chatbots.app.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final WebClient userInfoClient;
+    private final UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,6 +41,6 @@ public class SecurityConfig {
 
     @Bean
     public OpaqueTokenIntrospector introspector() {
-        return new GoogleOpaqueTokenIntrospector(userInfoClient);
+        return new GoogleOpaqueTokenIntrospector(userInfoClient,userService);
     }
 }
