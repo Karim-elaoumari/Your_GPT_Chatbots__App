@@ -1,0 +1,33 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Spring Configuration
+
+spring:
+
+  #to enable colors when you run your app outside intellij
+  output:
+    ansi:
+      enabled: always
+  # Database Configuration
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/chatybot?createDatabaseIfNotExist=true
+    username: root
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL5Dialect
+      ddl-auto: update
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          introspection-uri: https://www.googleapis.com
+          client-id: 162871444699-6rcpsihs95urts07e2h0jo9f1dl0bcvr.apps.googleusercontent.com
+          client-secret: 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
+
+
