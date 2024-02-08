@@ -15,8 +15,8 @@ spring:
   # Database Configuration
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/chatybot?createDatabaseIfNotExist=true
-    username: root
-    password:
+    username: karim
+    password: karim
   jpa:
     show-sql: true
     hibernate:
@@ -29,5 +29,12 @@ spring:
           introspection-uri: https://www.googleapis.com
           client-id: 162871444699-6rcpsihs95urts07e2h0jo9f1dl0bcvr.apps.googleusercontent.com
           client-secret: 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
+application:
+  token:
+    signing:
+      key: 413F4428472B4B6250655368566D5970337336763979244226452948404D6351
+      access-token-expiration: 86400000 # 1 day
+      refresh-token-expiration: 864000000 # 10 days
+
 
 
