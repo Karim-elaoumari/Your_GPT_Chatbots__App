@@ -1,6 +1,6 @@
 package com.chatbots.security.controllers;
 
-import com.chatbots.security.SecurityExceptionsHandlers.exception.handlers.response.ResponseMessage;
+import com.chatbots.security.SecurityExceptionsHandlers.response.ResponseMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

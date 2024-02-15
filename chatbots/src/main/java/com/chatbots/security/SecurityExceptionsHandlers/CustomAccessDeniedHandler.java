@@ -1,6 +1,6 @@
 package com.chatbots.security.SecurityExceptionsHandlers;
 
-import com.chatbots.security.SecurityExceptionsHandlers.exception.handlers.response.ResponseMessage;
+import com.chatbots.security.SecurityExceptionsHandlers.response.ResponseMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

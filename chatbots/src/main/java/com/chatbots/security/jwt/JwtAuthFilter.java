@@ -1,7 +1,7 @@
 package com.chatbots.security.jwt;
 
 
-import com.chatbots.security.SecurityExceptionsHandlers.exception.handlers.response.ResponseMessage;
+import com.chatbots.security.SecurityExceptionsHandlers.response.ResponseMessage;
 import com.chatbots.security.services.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

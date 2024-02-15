@@ -1,18 +1,12 @@
 package com.chatbots.security.controllers;
 
-import com.chatbots.security.SecurityExceptionsHandlers.exception.handlers.response.ResponseMessage;
+import com.chatbots.security.SecurityExceptionsHandlers.response.ResponseMessage;
 import com.chatbots.security.google.GoogleOpaqueTokenIntrospector;
-import com.chatbots.security.models.dto.RefreshhTokenRequestDTO;
-import com.chatbots.security.models.dto.UserLoginRequestDTO;
-import com.chatbots.security.models.dto.UserRegisterRequestDTO;
-import com.chatbots.security.models.dto.UserResponseDTO;
+import com.chatbots.security.models.dto.*;
 import com.chatbots.security.models.entities.User;
 import com.chatbots.security.models.enums.RegisterProvider;
 import com.chatbots.security.models.enums.UserRole;
 import com.chatbots.security.services.*;
-import com.chatbots.security.models.dto.TokenDTO;
-import com.chatbots.security.models.dto.UrlDTO;
-import com.chatbots.security.models.dto.UserInfoDTO;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -22,8 +16,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -33,7 +30,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationService authenticationService;
@@ -42,13 +38,22 @@ public class AuthController {
     private final UserService userService;
     private final GoogleOpaqueTokenIntrospector googleOpaqueTokenIntrospector;
     private final RoleService roleService;
+
+    @Value("${spring.security.oauth2.resourceserver.opaque-token.client-id}")
+    private String clientId;
+
+    @Value("${spring.security.oauth2.resourceserver.opaque-token.client-secret}")
+    private String clientSecret;
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody UserLoginRequestDTO loginRequest) {
         UserResponseDTO userDTO = authenticationService.login(loginRequest);
         return ResponseMessage.ok(userDTO,"you have authenticated");
     }
     @PostMapping("/register")
-    public ResponseEntity register(@Valid  @RequestBody UserRegisterRequestDTO registerRequest) {
+    public ResponseEntity register(@Valid @RequestBody UserRegisterRequestDTO registerRequest) {
+        if(!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())){
+            return ResponseMessage.badRequest("password and confirm password are not the same");
+        }
         UserResponseDTO userDTO = authenticationService.register(registerRequest.toUser());
         return ResponseMessage.ok(userDTO,"you have registred");
     }
@@ -61,11 +66,12 @@ public class AuthController {
         refreshTokenService.revokeRefreshToken(request.getRefreshToken());
         return ResponseMessage.ok(null,"you have logged out");
     }
-    @Value("${spring.security.oauth2.resourceserver.opaque-token.client-id}")
-    private String clientId;
-
-    @Value("${spring.security.oauth2.resourceserver.opaque-token.client-secret}")
-    private String clientSecret;
+    @GetMapping("/me")
+    public ResponseEntity me( ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Object principal = authentication.getPrincipal();
+            return ResponseMessage.ok(UserInfoResponseDTO.fromUser((User) principal),"you are authenticated");
+    }
     @GetMapping("/google/url")
     public ResponseEntity<UrlDTO> auth() {
         String url = new GoogleAuthorizationCodeRequestUrl(clientId,

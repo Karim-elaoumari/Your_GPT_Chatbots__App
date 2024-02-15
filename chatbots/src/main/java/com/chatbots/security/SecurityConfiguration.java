@@ -28,10 +28,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+//                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         request -> request
-                                .requestMatchers("/api/v1/auth/**","api/v1/auth/google/**").permitAll()
+                                .requestMatchers("/api/v1/auth/register","/api/v1/auth/login","/api/v1/auth/refresh-token","api/v1/auth/google/**").permitAll()
                                 .anyRequest().authenticated()
+
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

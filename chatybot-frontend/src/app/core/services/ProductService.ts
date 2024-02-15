@@ -1,10 +1,8 @@
 
 import { Product } from "../models/Product";
-import { HttpClient, HttpResponse } from "@angular/common/http";
+import { HttpClient} from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { get } from "lodash";
 import { Observable } from "rxjs";
-import { h } from "vue";
 
 @Injectable(
     {

@@ -1,9 +1,11 @@
 package com.chatbots.security.services.impl;
 
+import com.chatbots.security.SecurityExceptionsHandlers.exceptions.ResourceNotFoundException;
 import com.chatbots.security.models.dto.UserLoginRequestDTO;
 import com.chatbots.security.models.dto.UserResponseDTO;
 import com.chatbots.security.models.entities.RefreshToken;
 import com.chatbots.security.models.entities.User;
+import com.chatbots.security.models.enums.RegisterProvider;
 import com.chatbots.security.models.enums.UserRole;
 import com.chatbots.security.repositories.UserRepository;
 import com.chatbots.security.services.AuthenticationService;
@@ -49,7 +51,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
     @Override
     public UserResponseDTO register(User user) {
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+              throw new BadCredentialsException("Email already exist");
+        }
         user.setRole(roleService.getRoleByName(UserRole.USER));
+        user.setProvider(RegisterProvider.EMAIL);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user =  userRepository.save(user);
         String jwtToken  = jwtService.generateToken(user);

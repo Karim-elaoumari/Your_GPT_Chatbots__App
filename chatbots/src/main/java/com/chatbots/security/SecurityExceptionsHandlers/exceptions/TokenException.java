@@ -1,4 +1,4 @@
-package com.chatbots.security.SecurityExceptionsHandlers.exception.handlers.exceptions;
+package com.chatbots.security.SecurityExceptionsHandlers.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

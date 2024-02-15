@@ -1,6 +1,6 @@
 package com.chatbots.security.services.impl;
 
-import com.chatbots.security.SecurityExceptionsHandlers.exception.handlers.exceptions.TokenException;
+import com.chatbots.security.SecurityExceptionsHandlers.exceptions.TokenException;
 import com.chatbots.security.models.dto.UserResponseDTO;
 import com.chatbots.security.models.entities.RefreshToken;
 import com.chatbots.security.models.entities.User;

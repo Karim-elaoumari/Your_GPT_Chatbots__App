@@ -1,4 +1,4 @@
-package com.chatbots.security.SecurityExceptionsHandlers.exception.handlers.response;
+package com.chatbots.security.SecurityExceptionsHandlers.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

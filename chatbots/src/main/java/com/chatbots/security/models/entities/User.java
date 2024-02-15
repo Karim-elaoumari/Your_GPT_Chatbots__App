@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private RegisterProvider provider;
-    @OneToOne
+    @ManyToOne
     private Role role;
     @CreationTimestamp
     private LocalDateTime createdAt;
