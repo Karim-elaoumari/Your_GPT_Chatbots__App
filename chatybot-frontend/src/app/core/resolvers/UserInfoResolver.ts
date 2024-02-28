@@ -4,8 +4,8 @@ import { Observable } from "rxjs";
 import { AuthService } from "../services/AuthService";
 import { TokenStorageService } from "../services/TokenStorageService";
 import { UserResponseInfo } from "../models/UserResponseInfo";
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+// import { catchError } from 'rxjs/operators';
+// import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class UserInfoResolver implements Resolve<any> {
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<any> {
     const user: UserResponseInfo = this.tokenStorageService.getUser();
-
+    alert('UserInfoResolver');
     if (user == null) {
       try {
         const response: any = await this.authService.getUserInfo().toPromise();

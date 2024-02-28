@@ -6,13 +6,14 @@ import { RegisterComponent } from './view/pages/register/register.component';
 import { UserInfoResolver } from './core/resolvers/UserInfoResolver';
 import { ChatbotsComponent } from './view/pages/chatbots/chatbots.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { RolesGuard } from './core/guards/roles.guard';
 
 const routes: Routes = [
   { path: '',   redirectTo: '/home', pathMatch: 'full'},
   {path:'home', component: HomeComponent,resolve: {userInfo: UserInfoResolver}},
   {path: 'login',component: LoginComponent},
   { path: 'register', component: RegisterComponent},
-  { path: 'chatbots',component: ChatbotsComponent,resolve: {userInfo: UserInfoResolver},canActivate: [AuthGuard]}
+  { path: 'chatbots',component: ChatbotsComponent,resolve: {userInfo: UserInfoResolver},canActivate: [AuthGuard,RolesGuard],data: {expectedRoles: ['ADMIN','USER']}},
 ];
 
 @NgModule({

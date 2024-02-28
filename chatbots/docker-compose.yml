@@ -1,28 +1,41 @@
 services:
-  keycloak:
-    container_name: keycloak
-    image: quay.io/keycloak/keycloak:23.0.4
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_DB: mysql
-      KC_DB_URL: jdbc:mysql://mysql-chatybot/keycloak
-      KC_DB_USERNAME: karim
-      KC_DB_PASSWORD: karim
+#  keycloak:
+#    container_name: keycloak
+#    image: quay.io/keycloak/keycloak:23.0.4
+#    environment:
+#      KEYCLOAK_ADMIN: admin
+#      KEYCLOAK_ADMIN_PASSWORD: admin
+#      KC_DB: mysql
+#      KC_DB_URL: jdbc:mysql://mysql-chatybot/keycloak
+#      KC_DB_USERNAME: karim
+#      KC_DB_PASSWORD: karim
+#    ports:
+#      - "9090:8080"
+#    depends_on:
+#      - mysql-chatybot
+#    command:
+#      - "start-dev"
+#  mysql-chatybot:
+#    container_name: mysql-chatybot
+#    image: mysql:latest
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_USER: karim
+#      MYSQL_PASSWORD: karim
+#    volumes:
+#      - ./db_init:/docker-entrypoint-initdb.d
+#    ports:
+#      - "3306:3306"
+  db-chatybot:
+    hostname: db-chatybot
+    image: ankane/pgvector
     ports:
-      - "9090:8080"
-    depends_on:
-      - mysql-chatybot
-    command:
-      - "start-dev"
-  mysql-chatybot:
-    container_name: mysql-chatybot
-    image: mysql:latest
+      - 5432:5432
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: karim
-      MYSQL_PASSWORD: karim
+      - POSTGRES_DB=chatybot
+      - POSTGRES_USER=karim
+      - POSTGRES_PASSWORD=karim
+      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-      - ./db_init:/docker-entrypoint-initdb.d
-    ports:
-      - "3306:3306"
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql

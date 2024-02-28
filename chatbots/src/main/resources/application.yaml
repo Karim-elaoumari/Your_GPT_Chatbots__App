@@ -14,14 +14,16 @@ spring:
       enabled: always
   # Database Configuration
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/chatybot?createDatabaseIfNotExist=true
+#    url: jdbc:mysql://127.0.0.1:3306/chatybot?createDatabaseIfNotExist=true
+#    postgress
+    url: jdbc:postgresql://127.0.0.1:5432/chatybot
     username: karim
     password: karim
   jpa:
     show-sql: true
     hibernate:
-      dialect: org.hibernate.dialect.MySQL5Dialect
-      ddl-auto: create
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      ddl-auto: update
   security:
     oauth2:
       resourceserver:
@@ -29,12 +31,30 @@ spring:
           introspection-uri: https://www.googleapis.com
           client-id: 162871444699-6rcpsihs95urts07e2h0jo9f1dl0bcvr.apps.googleusercontent.com
           client-secret: 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
+  ai:
+   openai:
+     api-key: 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
+     embedding:
+       options:
+         model: text-embedding-ada-002
+     chat:
+       options:
+         temperature: 0.9
 application:
   token:
     signing:
       key: 413F4428472B4B6250655368566D5970337336763979244226452948404D6351
       access-token-expiration: 86400000 # 1 day
       refresh-token-expiration: 864000000 # 10 days
+#  gemini:
+#    chatbots:
+#      url: https://generativelanguage.googleapis.com
+#      key: AIzaSyBBj4xN9hAX4Zhxv92b8gHLOd1DofNg1ZQ
+
+#  openai:
+#    chatbots:
+#      url: https://api.openai.com
+#      key: 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
 
 
 
