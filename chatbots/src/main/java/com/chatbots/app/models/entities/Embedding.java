@@ -25,6 +25,8 @@ public class Embedding {
     private double[] embedding;
     @Column(columnDefinition = "text")
     private String text;
+    @ManyToOne
+    private ChatBot chatBot;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

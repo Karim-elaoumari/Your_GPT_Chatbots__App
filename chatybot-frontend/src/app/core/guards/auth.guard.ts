@@ -11,10 +11,11 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      alert('AuthGuard');
       const user = this.tokenStorageService.getUser();
-    if(user == null || user == undefined ){
+      const refresh = this.tokenStorageService.getRefreshToken();
+    if(user == null || user == undefined  || refresh == null || refresh == undefined){
       this.router.navigate(['/login']);
+      this.tokenStorageService.signOut();
       return false;
     }else return true;
   }

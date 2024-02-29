@@ -30,6 +30,8 @@ public class ChatBot {
     private String chatBackgroundColor;
     private String messageBackgroundColor;
     private String textColor;
+    @OneToMany(mappedBy = "chatBot", fetch = FetchType.EAGER)
+    private List<AllowedOrigins> allowedOrigins;
     @ManyToOne
     private User user;
 }

@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { IncludesModule } from '../includes/includes.module';
 import { ChatbotsComponent } from './chatbots/chatbots.component';
+import { ChatTemplateComponent } from './chat-template/chat-template.component';
 
 
 
@@ -15,7 +16,8 @@ import { ChatbotsComponent } from './chatbots/chatbots.component';
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    ChatbotsComponent
+    ChatbotsComponent,
+    ChatTemplateComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +28,9 @@ import { ChatbotsComponent } from './chatbots/chatbots.component';
   exports: [
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ChatbotsComponent,
+    ChatTemplateComponent
   ],
 })
 export class PagesModule { }

@@ -1,11 +1,21 @@
 package com.chatbots.app.controllers;
 
 import com.chatbots.app.SecurityExceptionsHandlers.response.ResponseMessage;
+import com.chatbots.app.helpers.UserPrincipleHelper;
+import com.chatbots.app.models.dto.ChatBotCreate;
+import com.chatbots.app.models.dto.ChatBotUpdate;
+import com.chatbots.app.models.dto.ChatQuestionRequest;
+import com.chatbots.app.models.dto.ChatTextEmbeddingRequest;
+import com.chatbots.app.models.entities.User;
 import com.chatbots.app.services.impl.ChatBotServiceImpl;
 import com.chatbots.app.services.impl.EmbeddingServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -15,28 +25,35 @@ import java.util.UUID;
 public class ChatController {
     private final EmbeddingServiceImpl embeddingService;
     private final ChatBotServiceImpl chatBotService;
-//    @GetMapping
-//    @PreAuthorize(value = "(hasRole('USER') or hasRole('ADMIN')) and hasAuthority('READ_USER')")
-//    public ResponseEntity main() {
-//        return ResponseMessage.ok("main content",null);
-//    }
-//    @GetMapping("/2")
-//    @PreAuthorize(value = "(hasRole('USER') or hasRole('ADMIN'))")
-//    public ResponseEntity main2() {
-//        return ResponseMessage.ok("main content",null);
-//    }
-    @PostMapping("/{text}")
-    public ResponseEntity createEmbedding(@PathVariable("text") String text){
-        return  ResponseMessage.ok(embeddingService.create(text),"good");
+    private final UserPrincipleHelper userPrincipleHelper;
+    @PostMapping("/embed/text")
+    public ResponseEntity createEmbedding(@Valid @RequestBody ChatTextEmbeddingRequest request){
+        User user = userPrincipleHelper.getUserPrincipalFromContextHolder();
+        if(user==null){
+            return ResponseMessage.notFound("user not in context");
+        }
+        request = new ChatTextEmbeddingRequest(request.text(), request.chatBotId(), user.getId());
+        return  ResponseMessage.ok(embeddingService.create(request),"embeddings created");
     }
-    @GetMapping
-    public  ResponseEntity getEmbedding(){
-        return ResponseMessage.ok(embeddingService.searchPlaces("hello"),"good");
+    @PostMapping("/embed/document/{chatBotId}/")
+    public ResponseEntity createEmbeddingFromDocument(@RequestParam("file") MultipartFile file,@Valid @Pattern(regexp = "^[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{12}$", message = "Invalid UUID") @PathVariable("chatBotId") UUID chatBotId){
+        User user = userPrincipleHelper.getUserPrincipalFromContextHolder();
+        if(user==null){
+            return ResponseMessage.notFound("user not in context");
+        }
+        return  ResponseMessage.ok(embeddingService.createFromDocument(user.getId(),chatBotId,file),"embeddings created");
     }
-    @GetMapping("question/{chatBotId}/{userCode}/{question}")
-    public ResponseEntity getResponse(@PathVariable("question") String question,@PathVariable("chatBotId") String chatBotId,@PathVariable("userCode") String userCode){
-        return ResponseMessage.ok(chatBotService.getResponse(question,userCode, UUID.fromString(chatBotId)),"good");
+    @GetMapping("question")
+    public ResponseEntity getResponse(@Valid @RequestBody ChatQuestionRequest request, HttpServletRequest httpRequest){
+        return ResponseMessage.ok(chatBotService.getResponse(request,httpRequest.getHeader("Origin")),"response from chat bot");
     }
-
+    @PostMapping("chatbot")
+    public ResponseEntity createChatBot(@Valid @RequestBody ChatBotCreate request){
+        return ResponseMessage.ok(chatBotService.createChatBot(request.toChatBot()),"chat bot created");
+    }
+    @PutMapping("chatbot")
+    public ResponseEntity updateChatBot(@Valid @RequestBody ChatBotUpdate request){
+        return ResponseMessage.ok(chatBotService.updateChatBot(request.toChatBot()),"chat bot updated");
+    }
 
 }
