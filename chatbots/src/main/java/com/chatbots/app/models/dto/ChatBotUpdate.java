@@ -3,13 +3,12 @@ package com.chatbots.app.models.dto;
 import com.chatbots.app.models.entities.ChatBot;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 
 import java.util.UUID;
 
 public record ChatBotUpdate(
         @NotNull
-        @Pattern(regexp = "^[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{12}$", message = "Invalid UUID")
+        @org.hibernate.validator.constraints.UUID
         String id,
         @NotNull @NotBlank
         String name,
@@ -20,9 +19,13 @@ public record ChatBotUpdate(
         @NotNull @NotBlank
         String initialMessage,
         @NotNull @NotBlank
-        String headerTitle,
+        String botMessageColor,
+        @NotNull @NotBlank
+        String userMessageColor,
         @NotNull @NotBlank
         String headerColor,
+        @NotNull @NotBlank
+        String buttonBackgroundColor,
         @NotNull @NotBlank
         String chatBackgroundColor,
         @NotNull @NotBlank
@@ -37,8 +40,10 @@ public record ChatBotUpdate(
                         .instructions(instructions)
                         .logoUrl(logoUrl)
                         .initialMessage(initialMessage)
-                        .headerTitle(headerTitle)
+                        .botMessageColor(botMessageColor)
+                        .userMessageColor(userMessageColor)
                         .headerColor(headerColor)
+                        .buttonBackgroundColor(buttonBackgroundColor)
                         .chatBackgroundColor(chatBackgroundColor)
                         .messageBackgroundColor(messageBackgroundColor)
                         .textColor(textColor)

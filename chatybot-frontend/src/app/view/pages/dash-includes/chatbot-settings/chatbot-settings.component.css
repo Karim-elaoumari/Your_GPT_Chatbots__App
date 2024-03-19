@@ -1,0 +1,20 @@
+#myIframe {
+    border: 2px;
+    border-radius: 10px 10px 10px 10px !important;
+    width: 80%;
+    padding-top:0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to make it appear floating */
+    height: 600px;
+    overflow: hidden;
+    
+
+}
+
+@media (max-width: 767px) {
+    #myIframe {
+        width: 100%; 
+    }
+}

@@ -1,5 +1,7 @@
-import { ProductEffects } from "./product/effect";
+import { ChatBotEffects } from "./chatbot/effect";
+import { DataEffects } from "./data/effect";
 
 export const rootEffects = [
-    ProductEffects,
+    ChatBotEffects,
+    DataEffects
 ];

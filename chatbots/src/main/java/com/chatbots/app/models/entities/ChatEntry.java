@@ -2,7 +2,10 @@ package com.chatbots.app.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Setter
@@ -20,4 +23,8 @@ public class ChatEntry {
     @ManyToOne()
     private ChatBot chatBot;
     private String userCode;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

@@ -54,6 +54,9 @@ export class LoginComponent {
     }
 
   }
+  loginWithGoogle(){
+    
+  }
   
 
 }

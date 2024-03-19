@@ -1,0 +1,84 @@
+<div class="mb-10 rounded border border-zinc-200" style="min-height: 70vh;" *ngIf="chat_bot.id">
+    <div class="border-b border-zinc-200 px-5 py-4">
+        <h3 class="text-xl font-semibold leading-6 text-zinc-900 ">{{chat_bot.name}}</h3>
+    </div>
+    <div class="p-5">
+            <div class="gap-8 sm:grid sm:grid-cols-2">
+                <div>
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Chatbot Logo</dt>
+                        <dd class="flex items-center mb-3">
+                            <div class="flex items-center space-x-4">
+                               <img [src]="chat_bot.logoUrl" style="width: 100px;border-radius:50%">
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Chatbot ID</dt>
+                        <dd class="flex items-center mb-3">
+                            <div class="flex items-center space-x-4">
+                                <div class="text-sm font-semibold text-zinc-700">{{chat_bot.id}}</div>
+                                
+                                <button cdkCopyToClipboard [cdkCopyToClipboard]="chat_bot.id" data-tooltip-target="tooltip-copy-id" data-tooltip-trigger="click" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-80 h-9 p-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 00-9-9z"></path>
+                                    </svg>
+                                </button>
+                                <div id="tooltip-copy-id" role="tooltip" class="absolute z-10 invisible inline-block px-2 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                    Copied!
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Initial Message</dt>
+                        <dd class="flex items-center mb-3">
+                           
+                                <textarea class="w-full h-20 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" [value]="chat_bot.initialMessage" disabled="true"></textarea>
+                            
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
+                        <dd class="flex items-center mb-3">
+                            <div class="flex items-center space-x-4">
+                                <span *ngIf="chat_bot.trained" class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Trained</span>
+                                <span *ngIf="!chat_bot.trained" class="bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Not Trained</span>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Instructions</dt>
+                        <dd class="flex items-center mb-3">
+                
+                              <textarea class="w-full h-24 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" [value]="chat_bot.instructions" disabled="true"></textarea>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Data characters</dt>
+                        <dd class="flex items-center mb-3">
+                            <span class="text-md font-medium text-gray-500 dark:text-gray-400">{{data_characters}} char</span>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Model</dt>
+                        <dd class="flex items-center">
+                            
+                            <span class="text-md font-medium text-gray-500 dark:text-gray-400">gpt-3.5-turbo</span>
+                        </dd>
+                    </dl>
+                </div>
+                <div>
+                    <div class="col-span-2 sm:col-span-1 " align="center"> 
+                        
+                        <iframe *ngIf="chat_bot && chat_bot.id" id="myIframe" [src]="'http://localhost:4200/chat-template?ch='+chat_bot.id+'&gn=http://localhost:4200' | safeUrl" scrolling="no" style="border-radius: 10px; padding: 0px;"></iframe>
+                    </div>
+                   
+                </div>
+            </div>
+        
+    </div>
+    <div >
+       <app-loader1 *ngIf="!chat_bot"></app-loader1>
+    </div>

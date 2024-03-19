@@ -31,6 +31,8 @@ public class User implements UserDetails {
     private String password;
     private RegisterProvider provider;
     @ManyToOne
+    private Subscription subscription;
+    @ManyToOne
     private Role role;
     @CreationTimestamp
     private LocalDateTime createdAt;

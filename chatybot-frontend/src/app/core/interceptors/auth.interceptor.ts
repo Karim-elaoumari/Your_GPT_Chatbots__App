@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   
-
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
@@ -24,15 +23,15 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<Object>> {
     let authReq = req;
     const token = this.tokenService.getToken();
-    if(!req.url.includes('auth/login') && !req.url.includes('auth/register')){
-
+    if(!req.url.includes('auth/login') && !req.url.includes('auth/register' ) && !req.url.includes('auth/refresh' ) &&  !req.url.includes('main/prompt') ){
+        console.log('Intercepted')
         if (token != null && token != undefined && token != '') {
           console.log('Token found');
           authReq = this.addTokenHeader(req, token);
         }
         return next.handle(authReq).pipe(
           catchError(error => { 
-          if (error instanceof HttpErrorResponse && authReq.url.includes('auth') && error.status === 401) {
+          if (error instanceof HttpErrorResponse && !authReq.url.includes('auth') && error.status == 401) {
             console.log('Error 401');
             return this.handle401Error(authReq, next);
             // return next.handle(req)
@@ -53,13 +52,13 @@ export class AuthInterceptor implements HttpInterceptor {
       console.log(token_ref)
       if (token_ref){
        
-        return this.authService.refreshToken(token_ref).pipe(
+        return this.authService.refreshToken().pipe(
           switchMap((response: any) => {
             console.log('Token Refreshed');
             this.isRefreshing = false;
-            this.tokenService.saveToken(response.data.token.access_token);
-            this.refreshTokenSubject.next(response.data.token.access_token);
-            return next.handle(this.addTokenHeader(request, response.data.token.access_token));
+            this.tokenService.saveToken(response.accessToken);
+            this.refreshTokenSubject.next(response.accessToken);
+            return next.handle(this.addTokenHeader(request, response.accessToken));
           }),
           catchError((err) => {
             this.isRefreshing = false;

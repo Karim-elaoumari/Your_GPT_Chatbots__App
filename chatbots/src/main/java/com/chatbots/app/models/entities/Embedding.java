@@ -1,5 +1,6 @@
 package com.chatbots.app.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,8 @@ public class Embedding {
     private double[] embedding;
     @Column(columnDefinition = "text")
     private String text;
+    @Column(nullable = false)
+    private Long dataId;
     @ManyToOne
     private ChatBot chatBot;
     @CreationTimestamp

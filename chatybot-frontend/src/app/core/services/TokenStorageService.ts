@@ -69,6 +69,7 @@ export class TokenStorageService {
       firstName: user.firstName,
       lastName: user.lastName,
       picture: user.picture,
+      subscription: user.subscription,
       provider: user.provider
     } as UserResponseInfo;
     localStorage.setItem(

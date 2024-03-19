@@ -1,0 +1,100 @@
+
+
+<div class="w-full p-3 text-left bg-gray-800  rounded-lg " style="min-height:95vh;">
+    <app-alert [error]="error" [success]="success" (errorClosed)="error=''" (successClosed)="success=''" ></app-alert>
+    <div class="flex px-4 w-full items-center justify-between" >
+        <h5 class="flex-col text-2xl font-bold tracking-tight text-white dark:text-white">Chatbots</h5>
+        <a href="#" routerLink="/chatbots/new-chatbot" class="flex-col items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            New Chatbot
+        </a>
+    </div>
+    <div class="w-full  mt-8" *ngIf="loaded">
+            <div class="flex flex-wrap items-center justify-center gap-2">
+                <div *ngFor="let chat_bot of my_chatbots | async" class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  (click)="viewChatBotDetails(chat_bot.id)">
+                        <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer">
+                           
+                                <img class="p-6 rounded-t-lg" [src]="chat_bot.logoUrl" alt="product image" style="height: 150px;width:auto" />
+                         
+                            <div class="px-5 pb-5" style="font-size: large;">
+                                {{chat_bot.name}}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+               
+            </div>
+    </div>
+    <div class="w-full mt-8" *ngIf="!loaded">
+        <div class="flex flex-wrap items-center justify-center gap-2 animate-pulse">
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                <div  class="basis-1/7 sm:basis-1/3 md:basis-1/6 ">
+                    <a  >
+                        <div class="w-full max-w-sm bg-gray-600 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style="width: 150px;min-height:230px;cursor:pointer"> 
+                        </div>
+                    </a>
+                </div>
+                
+                
+
+               
+          
+        </div>
+    </div>
+   
+   
+</div>
+

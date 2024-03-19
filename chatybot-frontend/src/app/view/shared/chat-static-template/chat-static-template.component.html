@@ -1,0 +1,60 @@
+<div [style.backgroundColor]="chatbot.headerColor" [style.color]="chatbot.textColor" class="flex flex-row items-center h-16 bg-white w-full justify-between text-gray-700 bg-white border-b-2 ps-6 pe-4" style="margin-top: 0px;">
+    <h1 class="flex-col text-bold text-2xl">{{chatbot.name}}</h1>
+    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-80 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 h-9 px-0 py-3 text-sm transition-transform duration-700 ease-in-out hover:rotate-180 hover:bg-inherit group-[.cb-dark]:text-zinc-300 group-[.cb-dark]:hover:text-zinc-400 group-[.cb-light]:text-zinc-700 group-[.cb-light]:hover:text-zinc-600"
+        aria-label="Reset Chat" title="Reset Chat">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" aria-hidden="true" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path>
+        </svg>
+    </button>
+</div>
+
+<div class="message-container flex flex-col h-full overflow-auto" [style.backgroundColor]="chatbot.chatBackgroundColor" [style.color]="chatbot.textColor"  style="height:473px">
+   <div class="grid grid-cols-12 gap-y-2" align="left">
+      <div class="col-start-1 col-end-8 p-3 rounded-lg">
+        <div class="flex flex-row items-center">
+         
+          <div
+            class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
+            [style.backgroundColor]="chatbot.botMessageColor"
+          >
+            <div>{{chatbot.initialMessage}}</div>
+          </div>
+        </div>
+      </div>
+      
+      
+        <div  class="col-start-6 col-end-13 p-3 rounded-lg">
+          <div class="flex items-center justify-start flex-row-reverse">
+            <div
+              class="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl"
+              [style.backgroundColor]="chatbot.userMessageColor"
+            >
+              <div>Hi There</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>
+
+<form  class="flex flex-row items-center h-16 bg-white w-full px-4 text-gray-900" [style.backgroundColor]="chatbot.messageBackgroundColor" [style.color]="chatbot.textColor">
+    <div class="flex-grow ml-4">
+        <div class="relative w-full">
+            <input formControlName="message" type="text" disabled="true" class="flex w-full border rounded-xl  pl-4 h-10" [style.backgroundColor]="chatbot.messageBackgroundColor" [style.borderColor]="chatbot.buttonBackgroundColor" />
+        </div>
+    </div>
+    <div class="ml-4">
+      <button
+      type="submit"
+       class="py-3 flex items-center justify-center   rounded-xl text-white px-4 py-1 flex-shrink-0"
+       [style.backgroundColor]="chatbot.buttonBackgroundColor"
+       disabled="true"
+       
+     >
+     <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" viewBox="0 0 24 24"><path [attr.fill]="chatbot.messageBackgroundColor" d="m3.4 20.4l17.45-7.48a1 1 0 0 0 0-1.84L3.4 3.6a.993.993 0 0 0-1.39.91L2 9.12c0 .5.37.93.87.99L17 12L2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91"/></svg>
+     </button>
+    </div>
+</form>

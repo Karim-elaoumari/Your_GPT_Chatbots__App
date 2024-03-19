@@ -3,9 +3,11 @@ package com.chatbots.app.controllers;
 import com.chatbots.app.SecurityExceptionsHandlers.response.ResponseMessage;
 import com.chatbots.app.config.google.GoogleOpaqueTokenIntrospector;
 import com.chatbots.app.models.dto.*;
+import com.chatbots.app.models.entities.Subscription;
 import com.chatbots.app.models.entities.User;
 import com.chatbots.app.models.enums.RegisterProvider;
 import com.chatbots.app.models.enums.UserRole;
+import com.chatbots.app.repositories.SubscriptionRepository;
 import com.chatbots.app.services.*;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -35,6 +38,7 @@ public class AuthController {
     private final UserService userService;
     private final GoogleOpaqueTokenIntrospector googleOpaqueTokenIntrospector;
     private final RoleService roleService;
+    private final SubscriptionRepository subscriptionRepository;
 
     @Value("${spring.security.oauth2.resourceserver.opaque-token.client-id}")
     private String clientId;
@@ -103,15 +107,17 @@ public class AuthController {
             UserInfoDTO userInfoDTO = googleOpaqueTokenIntrospector.introspect(token);
             Optional<User> user = userService.findUserByEmail(userInfoDTO.email());
             if(user.isEmpty()){
+                Subscription subscription = subscriptionRepository.findByName("Free Subscription").orElseThrow(()-> new ResourceAccessException("Subscription not found"));
+
                 user = Optional.of(userService.save(User.builder()
                         .firstName(userInfoDTO.name())
                         .lastName(userInfoDTO.name())
                         .email(userInfoDTO.email())
+                        .subscription(subscription)
                         .provider(RegisterProvider.GOOGLE)
                         .role(roleService.getRoleByName(UserRole.USER))
                         .build()));
             }
-
             return ResponseEntity.ok(UserResponseDTO.fromUser(user.get(),jwtService.generateToken(user.get()) , refreshTokenService.createRefreshToken(user.get().getId()).getToken()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

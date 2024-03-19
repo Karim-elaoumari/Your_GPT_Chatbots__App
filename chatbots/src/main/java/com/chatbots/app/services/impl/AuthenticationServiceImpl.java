@@ -3,9 +3,11 @@ package com.chatbots.app.services.impl;
 import com.chatbots.app.models.dto.UserLoginRequestDTO;
 import com.chatbots.app.models.dto.UserResponseDTO;
 import com.chatbots.app.models.entities.RefreshToken;
+import com.chatbots.app.models.entities.Subscription;
 import com.chatbots.app.models.entities.User;
 import com.chatbots.app.models.enums.RegisterProvider;
 import com.chatbots.app.models.enums.UserRole;
+import com.chatbots.app.repositories.SubscriptionRepository;
 import com.chatbots.app.repositories.UserRepository;
 import com.chatbots.app.services.AuthenticationService;
 import com.chatbots.app.services.JwtService;
@@ -28,6 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
     private final RoleService roleService;
+    private final SubscriptionRepository subscriptionRepository;
 
     @Override
     public UserResponseDTO login(UserLoginRequestDTO userLoginRequestDTO) {
@@ -56,6 +59,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole(roleService.getRoleByName(UserRole.USER));
         user.setProvider(RegisterProvider.EMAIL);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Subscription subscription = subscriptionRepository.findByName("Free Subscription").orElseThrow(()-> new ResourceAccessException("Subscription not found"));
+        user.setSubscription(subscription);
         user =  userRepository.save(user);
         String jwtToken  = jwtService.generateToken(user);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());

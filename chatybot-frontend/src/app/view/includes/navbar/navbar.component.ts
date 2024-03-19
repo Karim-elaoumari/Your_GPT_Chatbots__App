@@ -14,29 +14,7 @@ export class NavbarComponent {
   ) {}
   user:UserResponseInfo = {} as UserResponseInfo;
   ngOnInit(): void {
-    const root_url = this.activatedRoute.snapshot.routeConfig?.path;
-    if( root_url == 'home' || root_url == 'chatbots' ){
-        this.activatedRoute.data.subscribe((response:any) =>{
-          if(response.userInfo){
-            this.user = response.userInfo;
-          }
-        },
-        (error:any) => {
-          console.log(error);
-        }
-        );
-        }
-  //         console.log(response);
-  //         if(response.userInfo.statusCode === 200){
-  //           this.user = response.userInfo.data;
-  //           this.tokenStorageService.saveUser(response.userInfo.data);
-  //         }
-  //       },
-  //       (error:any) => {
-  //         console.log(error);
-  //       }
-  //       );
-  //  }
+    this.user = this.tokenStorageService.getUser();
   }
 
 }

@@ -1,7 +1,7 @@
 function toggleIframe() {
     if (iframeVisible) {
         iframe.style.display = 'none';
-        toggleButton.style.backgroundImage = 'url("http://localhost:8081/chat-bot.png")';
+        toggleButton.style.backgroundImage = 'url("'+button_logo_url+'")';
     } else {
         iframe.style.display = 'block';
         toggleButton.style.backgroundImage = 'url("http://localhost:8081/show-hide-icon.png")'; // Change to your alternate background image
@@ -9,6 +9,7 @@ function toggleIframe() {
 
     iframeVisible = !iframeVisible;
 }
+
 
 // Create styles for the button and iframe
 var styles = document.createElement('style');
@@ -22,7 +23,7 @@ styles.innerHTML = `
                                                         border-radius: 50%;
                                                         width: 50px;
                                                         height: 50px;
-                                                        background-image: url('http://localhost:8081/chat-bot.png');
+                                                        background-image: url('`+button_logo_url+`');
                                                         background-color: white;
                                                         background-size: cover;
                                                         cursor: pointer;
@@ -53,16 +54,14 @@ styles.innerHTML = `
                                                     }
                                                 `;
 document.head.appendChild(styles);
-
-// Create iframe element
-// get the domain of the current page
+var button_logo_url = "http://localhost:8081/chat-bot.png";
 var origin = window.location.origin;
-console.log(origin);
 var iframe = document.createElement('iframe');
 iframe.id = 'myIframe';
-iframe.src = "http://localhost:4200/chat-template";
+iframe.src = "http://localhost:4200/chat-template?ch="+chat_bot_code+"&gn="+origin;
 iframe.style.borderRadius = "10px";
-iframe.style.backgroundColor = "white";
+iframe.style.padding = "0px";
+// iframe.style.backgroundColor = "white";
 iframe.scrolling = "no";
 document.body.appendChild(iframe);
 
@@ -79,3 +78,16 @@ document.body.appendChild(toggleButton);
 
 // Initial state: iframe is hidden
 var iframeVisible = false;
+
+fetch('http://localhost:8081/api/v1/main/chatbot/logo/' + chat_bot_code)
+    .then(response => {
+        return response.text(); // Assuming the server returns the image URL as plain text
+    })
+    .then(logoUrl => {
+        console.log(logoUrl);
+        button_logo_url = logoUrl;
+        toggleButton.style.backgroundImage = 'url("' + logoUrl + '")';
+    })
+    .catch(error => {
+
+    });

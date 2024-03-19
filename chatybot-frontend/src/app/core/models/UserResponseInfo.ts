@@ -1,3 +1,5 @@
+import { subscription } from "./Subscription";
+
 export interface UserResponseInfo {
     id: number;
     firstName: string;
@@ -6,5 +8,6 @@ export interface UserResponseInfo {
     username: string;
     picture: string;
     provider: string;
+    subscription: subscription;
     role: string;
 }

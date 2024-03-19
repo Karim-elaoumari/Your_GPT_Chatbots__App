@@ -32,7 +32,7 @@
               <input type="password" name="confirm_password" [(ngModel)]="user_register.confirmPassword" placeholder="">
               <p *ngIf="register_validation['confirmPassword']" class="mt-2 text-xs text-red-600 dark:text-red-400">{{ register_validation['confirmPassword'] }}</p>
             </div>
-            <button class="sign" style="margin-top: 15px !important;" (click)="register()">Sign up</button>
+            <button class="sign bg-purple-600" style="margin-top: 15px !important;" (click)="register()">Sign up</button>
           </form>
           
         <div class="social-message">

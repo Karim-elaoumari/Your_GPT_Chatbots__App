@@ -1,5 +1,7 @@
-import { ProductState } from "./product/state";
+import { ChatbotState } from "./chatbot/state";
+import { DataState } from "./data/state";
 
 export interface RootState{
-    products: ProductState;
+    chatbots: ChatbotState;
+    data: DataState;
 }

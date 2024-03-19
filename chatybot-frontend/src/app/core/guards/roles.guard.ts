@@ -16,7 +16,7 @@ export class RolesGuard implements CanActivate {
 
     if (user && user.role) {
       const expectedRoles:string[] = route.data['expectedRoles'];
-
+      console.log(user);
       if (expectedRoles.includes(user.role)) {
         return true;
       } else {

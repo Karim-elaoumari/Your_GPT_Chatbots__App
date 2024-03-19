@@ -3,6 +3,10 @@ package com.chatbots.app.models.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -20,4 +24,8 @@ public class ChatEntryHistory {
     private String answer;
     @ManyToOne(fetch = FetchType.LAZY)
     private ChatEntry chatEntry;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

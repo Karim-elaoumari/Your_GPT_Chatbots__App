@@ -1,6 +1,8 @@
 
-import { productsReducer } from "./product/reducer";
+import { chatbotsReducer } from "./chatbot/reducer";
+import { dataReducer } from "./data/reducer";
 
 export const rootReducers = {
-    products: productsReducer,
+    chatbots: chatbotsReducer,
+    data: dataReducer
   };
