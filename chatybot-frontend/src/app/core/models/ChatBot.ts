@@ -15,4 +15,5 @@ export interface ChatBot {
         instructions: string,
         allowedOrigins: AllowedOrigins[],
         trained: boolean,
+        temperature: number,
 }

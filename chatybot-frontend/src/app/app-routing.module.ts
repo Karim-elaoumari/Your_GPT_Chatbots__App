@@ -29,7 +29,8 @@ const routes: Routes = [
   { path: 'chat-template',component: ChatTemplateComponent},
   { path: 'not-found',component: RouteNotFoundPageComponent},
   { path: 'server-error',component: InternalServerErrorComponent},
-  { path: '**', redirectTo: '/not-found', pathMatch: 'full'}
+  { path: '**', redirectTo: '/not-found', pathMatch: 'full'},
+  
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

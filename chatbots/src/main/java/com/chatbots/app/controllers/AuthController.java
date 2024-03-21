@@ -76,7 +76,7 @@ public class AuthController {
     @GetMapping("/google/url")
     public ResponseEntity<UrlDTO> auth() {
         String url = new GoogleAuthorizationCodeRequestUrl(clientId,
-                "http://localhost:4200",
+                "http://localhost:4200/login",
                 Arrays.asList(
                         "email",
                         "profile",
@@ -95,7 +95,7 @@ public class AuthController {
                     clientId,
                     clientSecret,
                     code,
-                    "http://localhost:4200"
+                    "http://localhost:4200/login"
             ).execute().getAccessToken();
 
 

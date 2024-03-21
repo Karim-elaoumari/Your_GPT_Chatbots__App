@@ -14,5 +14,9 @@ export class ChatbotsComponent {
     this.user = this.tokenStorageService.getUser();
 
   }
+  signOut(): void {
+    this.tokenStorageService.signOut();
+    window.location.reload();
+  }
 
 }

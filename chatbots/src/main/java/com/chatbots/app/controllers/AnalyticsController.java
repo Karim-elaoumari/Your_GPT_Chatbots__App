@@ -8,6 +8,8 @@ import com.chatbots.app.services.DataService;
 import com.chatbots.app.services.impl.ChatBotServiceImpl;
 import com.chatbots.app.services.impl.EmbeddingServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,19 +35,30 @@ public class AnalyticsController {
         }
     }
     @GetMapping("chatbot/data/{chatBotId}")
-    public ResponseEntity getChatBotData(@PathVariable String chatBotId){
+    public ResponseEntity getChatBotData(@PathVariable String chatBotId,@ParameterObject Pageable pageable){
         ChatBot chatBot = chatBotService.getChatBotById(UUID.fromString(chatBotId),false,null);
         User user = userPrincipleHelper.getUserPrincipalFromContextHolder();
         if(chatBot.getUser().getId()==user.getId()){
-            return ResponseMessage.ok(dataService.findByChatBotId(chatBot.getId()),"chatbot data");
+            return ResponseMessage.ok(dataService.findByChatBotId(chatBot.getId(),pageable),"chatbot data");
         }else {
             return ResponseMessage.forbidden("you are not allowed to access this resource");
         }
     }
     @DeleteMapping("chatbot/data/{dataId}")
     public ResponseEntity deleteChatBotData(@PathVariable String dataId){
-        dataService.deleteData(dataId);
+        User user = userPrincipleHelper.getUserPrincipalFromContextHolder();
+        dataService.deleteData(dataId,user.getId());
         return ResponseMessage.ok(null,"data deleted");
+    }
+    @GetMapping("chatbot/chat-entries/{chatBotId}")
+    public ResponseEntity getChatBotChatEntries(@PathVariable String chatBotId,@ParameterObject Pageable pageable){
+        ChatBot chatBot = chatBotService.getChatBotById(UUID.fromString(chatBotId),false,null);
+        User user = userPrincipleHelper.getUserPrincipalFromContextHolder();
+        if(chatBot.getUser().getId()==user.getId()){
+            return ResponseMessage.ok(dataService.getChatEntries(chatBot.getId(),pageable),"chatbot chat entries");
+        }else {
+            return ResponseMessage.forbidden("you are not allowed to access this resource");
+        }
     }
 
 }

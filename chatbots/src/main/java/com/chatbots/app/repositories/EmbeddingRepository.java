@@ -11,6 +11,7 @@ import java.util.UUID;
 
 @Repository
 public interface EmbeddingRepository extends JpaRepository<Embedding,Long> {
+  @Query(value = "SELECT * FROM embedding WHERE chat_bot_id = :chatBotId", nativeQuery = true)
   List<Embedding> findAllByChatBotId(UUID chatBotId);
   void deleteByDataId(Long dataId);
 

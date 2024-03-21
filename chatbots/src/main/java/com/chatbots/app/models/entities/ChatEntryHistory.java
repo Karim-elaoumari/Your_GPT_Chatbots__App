@@ -23,6 +23,7 @@ public class ChatEntryHistory {
     @Column(columnDefinition = "TEXT")
     private String answer;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private ChatEntry chatEntry;
     @CreationTimestamp
     private LocalDateTime createdAt;

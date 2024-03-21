@@ -74,6 +74,10 @@
                               </div>
 
                         </div>
+                        <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Temprature (random)</label>
+                        <div class="flex items-center space-x-4 mb-2">
+                            <span class="text-md font-medium text-gray-500 dark:text-gray-400">0 <input name="temperature" id="temprature-range" type="range" min="0" max="2" [(ngModel)]="chat_bot.temperature" step="0.1" class=" h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" style="width: 200px;"> 2</span><input type="number" name="temperature" step="0.1"  [(ngModel)]="chat_bot.temperature" class="w-16 h-8 border border-gray-300 text-black text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500  ">
+                        </div>
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Chat Bot Instructions</label>
                         <textarea name="instructions" rows="6" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-800 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="You are a ai assistant that help users by giving answers of questions " [(ngModel)]="chat_bot.instructions"></textarea>
                         <p *ngIf="chat_bot_validation_errors['instructions']" class="mt-2 text-xs text-red-600 dark:text-red-400">{{ chat_bot_validation_errors['instructions'] }}</p>

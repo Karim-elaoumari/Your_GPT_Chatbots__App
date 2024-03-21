@@ -26,7 +26,7 @@ export class ChatTemplateComponent {
   loading:boolean = true;
   message_loading:boolean = false;
   messages:Message[] = [];
-  conversation_code: string =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  conversation_code: string = '';
   @ViewChildren('messageContainer') messageContainer: QueryList<ElementRef> = {} as QueryList<ElementRef>;
 
   ngOnInit(): void {
@@ -34,11 +34,11 @@ export class ChatTemplateComponent {
       this.chat_bot_id = params['ch'];
       this.conversation_origin = params['gn'].replace(/(^\w+:|^)\/\//, '');
       this.getChatBotInterface();
+      this.createConversationCode();
     }
     );
     
   }
-
   getChatBotInterface() {
     this.chatBotService.getChatBotInterface(this.chat_bot_id, this.conversation_origin).subscribe(
       (data: any) => {
@@ -65,24 +65,21 @@ export class ChatTemplateComponent {
       let user_message = { bot:false,message:message?.value} as Message;
       this.messages.push(user_message);
       this.messageForm.reset();
-      this.message_loading = false;
-      this.typingLiveMessage("hello world my name is karim i am here to assist you todat for every thing you need");
   
-      
-
-      // this.chatBotService.sendMessage(question_req).subscribe(
-      //   (response:any) => {
-      //     let bot_message:Message  = { bot:true,message:response.data} as Message;
-      //     this.messages.push(bot_message);
-      //     this.message_loading = false;
-      //   },
-      //   (error:any) => {
-      //     console.log(error);
-      //     let bot_message:Message  = { bot:true,message:"Error Try Agian"} as Message;
-      //     this.messages.push(bot_message);
-      //     this.message_loading = false;
-      //   }
-      // )
+      this.chatBotService.sendMessage(question_req).subscribe(
+        (response:any) => {
+          let bot_message:Message  = { bot:true,message:response.data} as Message;
+          this.messages.push(bot_message);
+          this.message_loading = false;
+          this.scrollToBottom();
+        },
+        (error:any) => {
+          console.log(error);
+          let bot_message:Message  = { bot:true,message:"Error Try Agian"} as Message;
+          this.messages.push(bot_message);
+          this.message_loading = false;
+        }
+      )
     }
     
   
@@ -97,8 +94,9 @@ export class ChatTemplateComponent {
   removeMessages(){
     this.messages = [];
     this.conversation_code =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    localStorage.removeItem('conv_code');
+    localStorage.setItem('conv_code',this.conversation_code);
   }
-
 
   typingLiveMessage(message:string){
     let message_length = message.length;
@@ -126,6 +124,15 @@ export class ChatTemplateComponent {
         clearInterval(interval);
       }
     }, 30);
+  }
+  createConversationCode(){
+    let conv_code = localStorage.getItem('conv_code');
+    if(conv_code){
+      this.conversation_code = conv_code;
+    }else{
+      this.conversation_code =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('conv_code',this.conversation_code);
+    }
   }
 
 }

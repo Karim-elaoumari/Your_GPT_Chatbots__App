@@ -23,7 +23,7 @@
         <div class="flex flex-col h-full" style="padding-bottom: 30px;">
           <div class="grid grid-cols-12 gap-y-2">
           
-            <div class="col-start-1 col-end-8 p-3 rounded-lg">
+            <div class="col-start-1 col-end-12 p-3 rounded-lg">
               <div class="flex flex-row items-center">
                
                 <div
@@ -35,7 +35,7 @@
               </div>
             </div>
             <ng-container *ngFor="let message of messages; let last = last; let i = index">
-              <div *ngIf="message.bot" class="col-start-1 col-end-8 p-3 rounded-lg">
+              <div *ngIf="message.bot" class="col-start-1 col-end-12 p-3 rounded-lg">
                 <div class="flex flex-row items-center">
                   <div class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
                   [style.backgroundColor]="chat_bot.botMessageColor" >
@@ -44,7 +44,7 @@
                 </div>
               </div>
             
-              <div *ngIf="!message.bot" class="col-start-6 col-end-13 p-3 rounded-lg">
+              <div *ngIf="!message.bot" class="col-start-5 col-end-13 p-3 rounded-lg">
                 <div class="flex items-center justify-start flex-row-reverse">
                   <div
                     class="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl"
@@ -86,9 +86,11 @@
             <input
               formControlName="message"
               type="text"
-              class="flex w-full border rounded-xl  px-1 h-10"
+              class="flex w-full border rounded-xl  px-1 h-10 focus:outline-none focus:ring-1 focus:ring-blue-300 focus:border-transparent"
               [style.backgroundColor]="chat_bot.messageBackgroundColor"
               [style.borderColor]="chat_bot.buttonBackgroundColor"
+              [style.color]="chat_bot.buttonBackgroundColor"
+              [style.ringColor]="chat_bot.buttonBackgroundColor"
             />
             <!-- <button
               class="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"

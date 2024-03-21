@@ -12,9 +12,9 @@ import { BotTextdata } from "../models/BotTextData";
 export class DataService {
     constructor(private http:HttpClient) { }
     private readonly api:string = env.api;
-    getData(chatbotId: string): Observable<any> {
+    getData(chatbotId: string,page:number,size:number): Observable<any> {
         console.log('chatbotId', chatbotId);
-        return this.http.get(this.api + '/api/v1/analytics/chatbot/data/'+chatbotId);
+        return this.http.get(this.api + '/api/v1/analytics/chatbot/data/'+chatbotId+'?page='+page+'&size='+size);
     }
     createTextData(data:BotTextdata): Observable<any> {
         return this.http.post(this.api + '/api/v1/main/embed/text', data);

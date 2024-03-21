@@ -38,6 +38,8 @@ public class ChatBot {
     private String chatBackgroundColor;
     private String messageBackgroundColor;
     @Column(nullable = false)
+    private Float temperature;
+    @Column(nullable = false)
     private Boolean deleted = false;
     private String textColor;
     @OneToMany(mappedBy = "chatBot", fetch = FetchType.EAGER)

@@ -68,6 +68,14 @@
                             <span class="text-md font-medium text-gray-500 dark:text-gray-400">gpt-3.5-turbo</span>
                         </dd>
                     </dl>
+                    <dl>
+                        <dt class="text-sm mt-2 font-medium text-gray-500 dark:text-gray-400">Temprature:(random)</dt>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-md font-medium text-gray-500 dark:text-gray-400">0 <input id="temprature-range" [disabled]="true" type="range" min="0" max="2" [value]="chat_bot.temperature" step="0.1" class=" h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" style="width: 200px;"> 2</span><input type="number" [disabled]="true" [value]="chat_bot.temperature" class="w-16 h-8 border border-gray-300 text-black text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500  ">
+                        </div>
+                       
+
+                    </dl>
                 </div>
                 <div>
                     <div class="col-span-2 sm:col-span-1 " align="center"> 

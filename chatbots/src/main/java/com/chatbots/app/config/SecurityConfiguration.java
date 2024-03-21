@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/v1/auth/register",
                                         "/api/v1/auth/login",
                                         "/api/v1/auth/refresh-token",
+                                        "/api/v1/auth/google/**",
                                         "*.png", "*.jpg", "*.js",
                                         "/api/v1/main/chatbot/ui/**",
                                       "/api/v1/main/prompt",

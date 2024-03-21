@@ -3,7 +3,7 @@ import { UserLogin } from 'src/app/core/models/UserLogin';
 import { AuthService } from 'src/app/core/services/AuthService';
 import { TokenStorageService } from 'src/app/core/services/TokenStorageService';
 import { LoginValidation } from 'src/app/core/validators/LoginValidation';
-import {  Router } from '@angular/router';
+import {  ActivatedRoute, Router } from '@angular/router';
 import { UserResponse } from 'src/app/core/models/UserResponse';
 
 @Component({
@@ -17,14 +17,18 @@ export class LoginComponent {
   success: string = '';
   login_loading: boolean = false;
   login_validation:{ [key: string]: string } = {};
+  google_url: string = '';
+  code: string = this.route.snapshot.queryParams['code'];
 
   constructor(private authService:AuthService,
     private loginValidation:LoginValidation,
     private  router:Router,
+    private route:ActivatedRoute,
     private tokenStorageService:TokenStorageService
     ) { }
   ngOnInit(): void {
-    console.log('LoginComponent');
+    this.getGoogleUrl();
+    this.authenticateWithGoogle();
   }
   login() {
     console.log(this.user_login);
@@ -42,7 +46,7 @@ export class LoginComponent {
               this.router.navigate(['/home']);
             }else{
               this.login_loading = false;
-              this.error = 'Error while Logging test';
+              this.error = 'Error while Logging';
             }
           },
           (error) => {
@@ -55,7 +59,35 @@ export class LoginComponent {
 
   }
   loginWithGoogle(){
-    
+    if(this.google_url !== ''){
+    window.location.href = this.google_url;
+    }
+  }
+  getGoogleUrl(){
+    return this.authService.getGoogleLoginUrl().subscribe(
+      (response) => {
+        console.log(response);
+        this.google_url = response.authURL;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  authenticateWithGoogle(){
+    if(this.code!==undefined && this.code!==null && this.code!==''){
+      this.authService.loginWithGoogle(this.code).subscribe(
+        data => {
+          this.tokenStorageService.saveToken(data.token.access_token);
+          this.tokenStorageService.saveRefreshToken(data.token.refresh_token);
+          this.tokenStorageService.saveUser(data as UserResponse);
+          this.router.navigate(['/']);
+        },
+        error => {
+          this.error = 'Error while Logging in with Google';
+        }
+      )
+    }
   }
   
 

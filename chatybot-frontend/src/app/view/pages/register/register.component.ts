@@ -17,6 +17,7 @@ export class RegisterComponent {
   register_loading: boolean = false;
   user_register:UserRegister = {} as UserRegister;
   register_validation:{ [key: string]: string } = {};
+  google_url: string = '';
 
   constructor(private authService:AuthService,
     private registerValidation:RegisterValidation,
@@ -25,6 +26,7 @@ export class RegisterComponent {
     ) { }
   ngOnInit(): void {
     console.log('registerComponent');
+    this.getGoogleUrl();
   }
 
   register() {
@@ -51,6 +53,22 @@ export class RegisterComponent {
           this.success = '';
         }
       );
+    }
+  }
+  getGoogleUrl(){
+    return this.authService.getGoogleLoginUrl().subscribe(
+      (response) => {
+        console.log(response);
+        this.google_url = response.authURL;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  loginWithGoogle(){
+    if(this.google_url !== ''){
+    window.location.href = this.google_url;
     }
   }
 

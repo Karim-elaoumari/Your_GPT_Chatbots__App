@@ -1,7 +1,7 @@
 <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2 ms-2"> Chat Log:</h3>
             
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table *ngIf="loading==''" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
@@ -17,32 +17,26 @@
                     Requests
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Used Data
-                </th>
-                <th scope="col" class="px-6 py-3">
                     Action
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+            <tr *ngFor="let conv of conversations" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple MacBook Pro 17"
+                    {{conv.userCode}}
                 </th>
                 <td class="px-6 py-4">
-                    Silver
+                    {{conv.createdAt | date: 'short'}}
                 </td>
                 <td class="px-6 py-4">
-                    Laptop
+                    {{conv.domain}}
                 </td>
                 <td class="px-6 py-4">
-                    $2999
+                    {{conv.chatEntryHistories.length}}
                 </td>
                 <td class="px-6 py-4">
-                    $2999
-                </td>
-                <td class="px-6 py-4">
-                    <button data-modal-target="text-modal" data-modal-toggle="text-modal" class="block text-white bg-gray-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    <button (click)="modalClicked(conv)" data-modal-target="text-modal" data-modal-toggle="text-modal" class="block text-white bg-gray-500 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                         Conversation
                       </button>
                 </td>
@@ -50,9 +44,24 @@
            
         </tbody>
     </table>
+    <div  *ngIf="conversations.length==0 && loading==''" class="flex flex-col items-center justify-center h-96">
+        <div class="flex flex-col items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="4rem" height="4rem" viewBox="0 0 24 24"><g fill="none" stroke="#6213d8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m17.121 21.364l2.122-2.121m2.121-2.122l-2.121 2.122m0 0L17.12 17.12m2.122 2.122l2.121 2.121M4 6v6s0 3 7 3s7-3 7-3V6"/><path d="M11 3c7 0 7 3 7 3s0 3-7 3s-7-3-7-3s0-3 7-3m0 18c-7 0-7-3-7-3v-6"/></g></svg>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">No Conversations Found</h3>
+            <p class="text-gray-500 dark:text-gray-400">No Conversations Found</p>
+        </div>
+    </div>
+    <!-- waiting conversation -->
+    <div *ngIf="loading!=''" class="flex flex-col items-center justify-center h-96">
+        <div class="flex flex-col items-center justify-center">
+           <svg xmlns="http://www.w3.org/2000/svg" width="4rem" height="4rem" viewBox="0 0 24 24"><circle cx="12" cy="2" r="0" fill="#6213d8"><animate attributeName="r" begin="0" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(45 12 12)"><animate attributeName="r" begin="0.125s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(90 12 12)"><animate attributeName="r" begin="0.25s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(135 12 12)"><animate attributeName="r" begin="0.375s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(180 12 12)"><animate attributeName="r" begin="0.5s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(225 12 12)"><animate attributeName="r" begin="0.625s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(270 12 12)"><animate attributeName="r" begin="0.75s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(315 12 12)"><animate attributeName="r" begin="0.875s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">{{loading}}</h3>
+            <p class="text-gray-500 dark:text-gray-400">Conversations</p>
+        </div>
+    </div>
     
 </div>
-<app-pagination [page]="page" [size]="size"  (pageChange)="onPageChange($event)"></app-pagination>
+<app-pagination *ngIf="loading=='' && conversations.length!=0" [page]="page" [size]="size" [this_page_count]="conversations.length" (pageChange)="onPageChange($event)"></app-pagination>
 
 
     <!-- modall  -->
@@ -64,7 +73,7 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                        Conversation
+                        Conversation: {{selected_conversation.userCode}}
                     </h3>
                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="text-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -74,36 +83,35 @@
                     </button>
                   
                 </div>
-                <div class="p-4 md:p-5">
-                    <div class="col-start-1 col-end-8 pb-2  rounded-lg">
+                <div class="p-4 md:p-5" style="overflow-y: auto;scroll-behavior: smooth;max-height:400px">
+                      <div class="col-start-1 col-end-12 pb-2  rounded-lg">
                         <div class="flex flex-row items-center">
                          
                           <div
                             class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
                           >
-                            <div>hello how can i assist you today</div>
+                            <div>{{chat_bot.initialMessage}}</div>
                           </div>
                         </div>
                       </div>
-                      <!-- <ng-container *ngFor="let message of messages; let last = last; let i = index"> -->
-                        <div  class="col-start-1 col-end-8 pb-2 rounded-lg">
-                          <div class="flex flex-row items-center">
-                            <div class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl" >
-                              hello
-                            </div>
-                          </div>
-                        </div>
-                      
-                        <div  class="col-start-6 col-end-13 pb-2 rounded-lg">
+                      <ng-container *ngFor="let message of selected_conversation.chatEntryHistories; let last = last; let i = index">
+                        <div  class="col-start-5 col-end-13 pb-2 rounded-lg">
                           <div class="flex items-center justify-start flex-row-reverse">
                             <div
                               class="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl"
                             >
-                              <div>hello</div>
+                              <div>{{message.question}}</div>
                             </div>
                           </div>
                         </div>
-                      <!-- </ng-container> -->
+                        <div  class="col-start-1 col-end-12 pb-2 rounded-lg">
+                            <div class="flex flex-row items-center">
+                              <div class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl" >
+                                {{message.answer}}
+                              </div>
+                            </div>
+                          </div>
+                      </ng-container>
                 </div>
                 <!-- Modal body -->
             </div>

@@ -25,4 +25,10 @@ export class AuthService {
     refreshToken():Observable<any>{
         return this.http.get(this.api+'/api/v1/auth/refresh',{headers:{'Authorization':`Bearer ${this.tokenStorageService.getRefreshToken()}`}});
     }
+    getGoogleLoginUrl():Observable<any>{
+        return this.http.get(this.api+'/api/v1/auth/google/url');
+    }
+    loginWithGoogle(code:string):Observable<any>{
+        return this.http.get(this.api+'/api/v1/auth/google/callback',{params:{code:code}});
+    }
 }

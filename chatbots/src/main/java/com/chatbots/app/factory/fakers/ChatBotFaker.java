@@ -17,6 +17,7 @@ public class ChatBotFaker {
                 .userMessageColor("#E5EDFF")
                 .botMessageColor("#FFFFFF")
                 .headerColor("#ffffff")
+                .temperature(0.9f)
                 .deleted(false)
                 .logoUrl("https://img.freepik.com/free-vector/chatbot-chat-message-vectorart_78370-4104.jpg")
                 .initialMessage("Hello, I am AI Assistant. I am here to help you with the information you need. \n feel free to ask me anything.")

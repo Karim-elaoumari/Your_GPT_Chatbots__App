@@ -62,6 +62,12 @@
                                         text/html,
                                         application/xml,
                                         application/json,
+                                        image/jpeg,
+                                        image/png,
+                                        image/gif,
+                                        image/bmp,
+                                        image/webp,
+                                        image/jpg,
                                         application/x-yaml,
                                         application/vnd.ms-excel,
                                         application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
@@ -124,7 +130,7 @@
                                             {{data.createdAt}}
                                         </td>
                                         <td class="px-4 py-1">
-                                            <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="block text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                            <button  (click)="deleteData(data.id)" class="block text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                                                 Delete
                                             </button>
                                         </td>
@@ -132,9 +138,24 @@
                                    
                                 </tbody>
                             </table>
+                            <div  *ngIf="bot_data.length==0 && data_loading==''" class="flex flex-col items-center justify-center h-96">
+                                <div class="flex flex-col items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="4rem" height="4rem" viewBox="0 0 24 24"><g fill="none" stroke="#6213d8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m17.121 21.364l2.122-2.121m2.121-2.122l-2.121 2.122m0 0L17.12 17.12m2.122 2.122l2.121 2.121M4 6v6s0 3 7 3s7-3 7-3V6"/><path d="M11 3c7 0 7 3 7 3s0 3-7 3s-7-3-7-3s0-3 7-3m0 18c-7 0-7-3-7-3v-6"/></g></svg>
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">No Data Found</h3>
+                                    <p class="text-gray-500 dark:text-gray-400">No Data Found For {{chat_bot.name}}</p>
+                                </div>
+                            </div>
+                            <!-- waiting conversation -->
+                            <div *ngIf="data_loading!=''" class="flex flex-col items-center justify-center h-96">
+                                <div class="flex flex-col items-center justify-center">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="4rem" height="4rem" viewBox="0 0 24 24"><circle cx="12" cy="2" r="0" fill="#6213d8"><animate attributeName="r" begin="0" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(45 12 12)"><animate attributeName="r" begin="0.125s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(90 12 12)"><animate attributeName="r" begin="0.25s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(135 12 12)"><animate attributeName="r" begin="0.375s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(180 12 12)"><animate attributeName="r" begin="0.5s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(225 12 12)"><animate attributeName="r" begin="0.625s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(270 12 12)"><animate attributeName="r" begin="0.75s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#6213d8" transform="rotate(315 12 12)"><animate attributeName="r" begin="0.875s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">{{data_loading}}</h3>
+                                    <p class="text-gray-500 dark:text-gray-400">{{chat_bot.name}} Data </p>
+                                </div>
+                            </div>
                             
                         </div>
-                        <app-pagination [page]="page" [size]="size"  (pageChange)="onPageChange($event)"></app-pagination>
+                        <app-pagination *ngIf="data_loading=='' && bot_data.length!=0" [page]="page" [size]="size" [this_page_count]="bot_data.length"  (pageChange)="onPageChange($event)"></app-pagination>
                         
                     </div>
                 </div>

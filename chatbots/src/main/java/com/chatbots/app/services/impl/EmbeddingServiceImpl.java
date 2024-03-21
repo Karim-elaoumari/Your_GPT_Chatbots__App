@@ -72,6 +72,7 @@ public class EmbeddingServiceImpl implements EmbeddingService{
                             .text(splitedText.get(i))
                             .embedding(embeddingArray)
                             .dataId(data.getId())
+                            .chatBot(chatBot)
                             .build()
             );
 
@@ -98,7 +99,7 @@ public class EmbeddingServiceImpl implements EmbeddingService{
                 "application/vnd.ms-excel", // Excel (Legacy)
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (XLSX)
                 "application/vnd.ms-powerpoint", // PowerPoint (Legacy)
-                "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (PPTX)
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation"
         );
         if(!allowedFileTypes.contains(file.getContentType())){
             throw new RuntimeException("File type not allowed");
@@ -127,6 +128,7 @@ public class EmbeddingServiceImpl implements EmbeddingService{
                              .text(document.getContent())
                              .embedding(embeddingArray)
                              .dataId(data.getId())
+                             .chatBot(chatBot)
                              .build()
              );
          }

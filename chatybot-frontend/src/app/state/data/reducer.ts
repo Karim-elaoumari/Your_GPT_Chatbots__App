@@ -27,53 +27,71 @@ export function dataReducer(state:DataState = initialState, action:any):DataStat
         case DataActionTypes.CREATE_DATA:
             return {
                 ...state,
-                loading: LoadingStatus.LOADING,
+                saving: LoadingStatus.LOADING,
             }
         case DataActionTypes.CREATE_DATA_SUCCESS:
             return {
                 ...state,
-                loading: LoadingStatus.LOADED,
+                saving: LoadingStatus.LOADED,
                 data: [...state.data, action.payload]
             }
         case DataActionTypes.CREATE_DATA_FAILURE:
             return {
                 ...state,
-                loading: LoadingStatus.ERROR,
+                saving: LoadingStatus.ERROR,
                 error: action.payload
             }
         case DataActionTypes.DELETE_DATA:
             return {
                 ...state,
-                loading: LoadingStatus.LOADING,
+                deleting: LoadingStatus.LOADING,
             }
         case DataActionTypes.DELETE_DATA_SUCCESS:
             return {
                 ...state,
-                loading: LoadingStatus.LOADED,
-                data: state.data.filter((data) => data.id !== action.payload.id)
+                deleting: LoadingStatus.LOADED,
+                data: state.data.filter((data) => data.id !== action.payload)
             }
         case DataActionTypes.DELETE_DATA_FAILURE:
             return {
                 ...state,
-                loading: LoadingStatus.ERROR,
+                deleting: LoadingStatus.ERROR,
                 error: action.payload
             }
         case DataActionTypes.CREATE_FILE_DATA:
             return {
                 ...state,
-                loading: LoadingStatus.LOADING,
+                saving: LoadingStatus.LOADING,
             }
         case DataActionTypes.CREATE_FILE_DATA_SUCCESS:
             return {
                 ...state,
-                loading: LoadingStatus.LOADED,
+                saving: LoadingStatus.LOADED,
                 data: [...state.data, action.payload]
             }
         case DataActionTypes.CREATE_FILE_DATA_FAILURE:
             return {
                 ...state,
-                loading: LoadingStatus.ERROR,
+                saving: LoadingStatus.ERROR,
                 error: action.payload
+            }
+        // conversation
+        case DataActionTypes.LOAD_CONVERSATIONS:
+            return {
+                ...state,
+                conv_loading: LoadingStatus.LOADING,
+            }
+        case DataActionTypes.LOAD_CONVERSATIONS_SUCCESS:
+            return {
+                ...state,
+                conv_loading: LoadingStatus.LOADED,
+                conversations: action.payload
+            }
+        case DataActionTypes.LOAD_CONVERSATIONS_FAILURE:
+            return {
+                ...state,
+                conv_loading: LoadingStatus.ERROR,
+                conv_error: action.payload
             }
         default:
             return state;

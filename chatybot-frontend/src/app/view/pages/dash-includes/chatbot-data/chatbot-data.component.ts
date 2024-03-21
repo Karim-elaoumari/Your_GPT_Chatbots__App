@@ -8,8 +8,8 @@ import { UserResponse } from 'src/app/core/models/UserResponse';
 import { TokenStorageService } from 'src/app/core/services/TokenStorageService';
 import { getChatBotSelector } from 'src/app/state/chatbot/selector';
 import { LoadingStatus } from 'src/app/state/chatbot/state';
-import { CreateData, CreateFileData, LoadData } from 'src/app/state/data/action';
-import { getDataLoadingStatusSelector, getDataSelector } from 'src/app/state/data/selector';
+import { CreateData, CreateFileData, DeleteData, LoadData } from 'src/app/state/data/action';
+import { getDataDeletingStatusSelector, getDataErrorSelector, getDataLoadingStatusSelector, getDataSavingStatusSelector, getDataSelector } from 'src/app/state/data/selector';
 
 @Component({
   selector: 'app-chatbot-data',
@@ -38,6 +38,7 @@ export class ChatbotDataComponent {
    bot_data: BotData[] = [];
 
    loading: boolean = false;
+   data_loading: string = 'Waiting for Data to load...';
   ngOnInit(): void {
     this.user = this.tokenStorageService.getUser();
     this.store.select(getChatBotSelector).subscribe(
@@ -51,6 +52,7 @@ export class ChatbotDataComponent {
   }
   onPageChange(page: number){
     this.page = page;
+    this.getAllData();
   }
 
   onDragOver(event: DragEvent): void {
@@ -91,7 +93,7 @@ export class ChatbotDataComponent {
         text: this.new_text_data
       } as BotTextdata;
       this.store.dispatch(new CreateData(text_data));
-      this.store.select(getDataLoadingStatusSelector).subscribe(
+      this.store.select(getDataSavingStatusSelector).subscribe(
         (loading:LoadingStatus) => {
           if(loading == LoadingStatus.LOADED){
             this.success = 'Text data added successfully';
@@ -117,7 +119,7 @@ export class ChatbotDataComponent {
       this.loading = true;
 
       this.store.dispatch(new CreateFileData({chat_bot_id:this.chat_bot.id, file:this.selected_file}));
-      this.store.select(getDataLoadingStatusSelector).subscribe(
+      this.store.select(getDataSavingStatusSelector).subscribe(
         (loading:LoadingStatus) => {
           if(loading == LoadingStatus.LOADED){
             this.success = 'File data added successfully';
@@ -135,12 +137,48 @@ export class ChatbotDataComponent {
   }
   }
   getAllData(){
-    this.store.dispatch(new LoadData(this.chat_bot.id));
+    this.store.dispatch(new LoadData({chat_bot_id:this.chat_bot.id,page:this.page, size:this.size}));
+    this.selectData();
+   
+  }
+  selectData(){
+    this.data_loading = 'Waiting for Data to load...';
     this.store.select(getDataSelector).subscribe(
       (data:  BotData[]) => {
         this.bot_data = data;
+        this.store.select(getDataLoadingStatusSelector).subscribe(
+          (loading:LoadingStatus) => {
+            if(loading == LoadingStatus.LOADED){
+              this.data_loading = '';
+            }else if(loading == LoadingStatus.ERROR){
+              this.data_loading = 'Error Loading Data';
+            }
+          }
+        );
       }
     )
+  }
+  deleteData(data_id:string){
+    this.store.dispatch(new DeleteData(data_id));
+    this.loading = true;
+    this.store.select(getDataDeletingStatusSelector).subscribe(
+      (loading:LoadingStatus) => {
+        if(loading == LoadingStatus.LOADED){
+          this.success = 'Data deleted successfully';
+          this.error = '';
+          this.loading = false;
+        }else if(loading == LoadingStatus.ERROR){
+          this.store.select(getDataErrorSelector).subscribe(
+            (error:string) => {
+              this.error = error;
+              this.success = '';
+              this.loading = false;
+            }
+          );
+         
+        }
+      }
+    );
   }
 
 }

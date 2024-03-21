@@ -1,5 +1,6 @@
 package com.chatbots.app.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,8 +22,10 @@ public class ChatEntry {
     @OneToMany(mappedBy = "chatEntry",  fetch = FetchType.EAGER)
     private List<ChatEntryHistory> chatEntryHistories;
     @ManyToOne()
+    @JsonIgnore
     private ChatBot chatBot;
     private String userCode;
+    private String domain;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

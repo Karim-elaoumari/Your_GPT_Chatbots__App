@@ -31,7 +31,10 @@ public record ChatBotUpdate(
         @NotNull @NotBlank
         String messageBackgroundColor,
         @NotNull @NotBlank
-        String textColor
+        String textColor,
+        @NotNull
+        Float temperature
+
 ) {
         public ChatBot toChatBot() {
                 return ChatBot.builder()
@@ -47,6 +50,7 @@ public record ChatBotUpdate(
                         .chatBackgroundColor(chatBackgroundColor)
                         .messageBackgroundColor(messageBackgroundColor)
                         .textColor(textColor)
+                        .temperature(temperature)
                         .build();
         }
 }

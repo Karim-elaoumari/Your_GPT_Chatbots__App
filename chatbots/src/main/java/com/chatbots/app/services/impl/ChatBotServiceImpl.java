@@ -8,6 +8,7 @@ import com.chatbots.app.repositories.ChatEntryRepository;
 import com.chatbots.app.repositories.UserRepository;
 import com.chatbots.app.services.ChatBotService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.autoconfigure.openai.OpenAiEmbeddingProperties;
 import org.springframework.ai.chat.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
@@ -15,6 +16,9 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.openai.OpenAiChatClient;
+import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -26,7 +30,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ChatBotServiceImpl   implements ChatBotService{
     private final EmbeddingServiceImpl embeddingService;
-    private final ChatClient chatClient;
+    private final OpenAiChatClient chatClient;
     @Value("classpath:templates/assistant-template.st")
     private  Resource assistantTemplate;
     @Value("${application.frontend.url}")
@@ -39,11 +43,11 @@ public class ChatBotServiceImpl   implements ChatBotService{
     public String getResponse(ChatQuestionRequest request) {
 //        valdiate chatbot request origin
         ChatBot chatBot = chatBotRepository.findByIdAndDeletedIs(UUID.fromString(request.chatBotId()),false).orElseThrow( () -> new RuntimeException("ChatBot not found"));
-
         if(validateOrigin(request.origin(),chatBot)==false){
             throw new RuntimeException("Origin not allowed");
         }
         validateQuestionsLimit(chatBot.getUser());
+
 //        get embedding data and create prompt
         String data  = getEmbeddingData(UUID.fromString(request.chatBotId()),request.question());
         PromptTemplate promptTemplate = new PromptTemplate(assistantTemplate);
@@ -54,9 +58,8 @@ public class ChatBotServiceImpl   implements ChatBotService{
 //        get chat entry and create new if not exist
         Optional<ChatEntry> chatEntry = chatEntryRepository.findByUserCode(request.userCode());
         if(chatEntry.isEmpty()){
-            chatEntry = Optional.of(createNewChatEntry(request.userCode(), chatBot));
+            chatEntry = Optional.of(createNewChatEntry(request.userCode(), chatBot,request.origin()));
         }
-        System.out.println(chatEntry.get().getChatEntryHistories());
         List<Message> messages = new ArrayList<>();
         messages.add(new SystemMessage(promptTemplate.create(promptParameters).getContents()));
         if(chatEntry.get().getChatEntryHistories()!=null && !chatEntry.get().getChatEntryHistories().isEmpty()){
@@ -67,19 +70,23 @@ public class ChatBotServiceImpl   implements ChatBotService{
         }
 
         messages.add(new UserMessage(request.question()));
-        System.out.println(messages);
 //        call chat client and save chat entry history
-        Prompt fullPrompt =  new Prompt(messages);
+        Prompt fullPrompt =  new Prompt(messages, OpenAiChatOptions.builder()
+                .withTemperature(chatBot.getTemperature())
+                .build());
         String answer =  chatClient.call(fullPrompt).getResult().getOutput().getContent();
         saveChatEntryHistory(chatEntry.get(), request.question(), answer);
         return answer;
 
 
     }
-    private ChatEntry createNewChatEntry(String userCode, ChatBot chatBot){
+    private ChatEntry createNewChatEntry(String userCode, ChatBot chatBot,String domain){
+        byte[] decodedBytes = Base64.getDecoder().decode(domain);
+        String decodedString = new String(decodedBytes);
         ChatEntry chatEntry = ChatEntry.builder()
                 .userCode(userCode)
                 .chatBot(chatBot)
+                .domain(decodedString)
                 .build();
         return chatEntryRepository.save(chatEntry);
     }
@@ -108,6 +115,8 @@ public class ChatBotServiceImpl   implements ChatBotService{
         }
         chatBot.setUser(user1);
         chatBot.setDeleted(false);
+        chatBot.setTrained(false);
+        chatBot.setTemperature(0.9f);
         chatBot.setInstructions("I want you to act as a support agent. Your name is \"AI Assistant\". You will provide me with answers using the given data. If the answer can't be generated using the given data, say I am not sure. and stop after that. Refuse to answer any question not about (the info or your name,your job,hello word). Never break character.");
         chatBot.setChatBackgroundColor("#f3f6f4");
         chatBot.setMessageBackgroundColor("#ffffff");
@@ -135,6 +144,7 @@ public class ChatBotServiceImpl   implements ChatBotService{
         chatBotToUpdate.setButtonBackgroundColor(chatBot.getButtonBackgroundColor());
         chatBotToUpdate.setTextColor(chatBot.getTextColor());
         chatBotToUpdate.setInitialMessage(chatBot.getInitialMessage());
+        chatBotToUpdate.setTemperature(chatBot.getTemperature());
         return chatBotRepository.save(chatBotToUpdate);
     }
     @Override
