@@ -2,6 +2,7 @@ import { ChatBotActionTypes } from "./action";
 import { ChatbotState, LoadingStatus, initialState } from "./state";
 
 export function chatbotsReducer(state:ChatbotState = initialState, action:any):ChatbotState {
+    
     switch (action.type) {
         case ChatBotActionTypes.LOAD_CHATBOTS_SUCCESS:
             return {
@@ -9,6 +10,11 @@ export function chatbotsReducer(state:ChatbotState = initialState, action:any):C
                 loading: LoadingStatus.LOADED,
                 chatbots: action.payload
             }   
+        case ChatBotActionTypes.LOAD_CHATBOTS:
+            return {
+                ...state,
+                loading: LoadingStatus.LOADING,
+            }  
         case ChatBotActionTypes.LOAD_CHATBOTS_FAILURE:
             return {
                 ...state,

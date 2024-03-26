@@ -26,8 +26,16 @@ services:
 #      - ./db_init:/docker-entrypoint-initdb.d
 #    ports:
 #      - "3306:3306"
+  chatybot-front:
+    container_name: chatybot-front
+    image: karimelaoumari/chatybot-frontend:1.0.0
+    ports:
+      - "4200:80"
+    depends_on:
+      - chatybot
   db-chatybot:
     hostname: db-chatybot
+    container_name: db-chatybot-2
     image: ankane/pgvector
     ports:
       - 5432:5432
@@ -39,3 +47,16 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  chatybot:
+    container_name: chatybot-backend
+#    build: .
+    image: karimelaoumari/chatybot-backend:1.0.0
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db-chatybot
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-chatybot-2:5432/chatybot
+      - SPRING_DATASOURCE_USERNAME=karim
+      - SPRING_DATASOURCE_PASSWORD=karim

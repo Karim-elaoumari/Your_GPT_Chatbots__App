@@ -14,9 +14,9 @@ public class MainSeeder implements CommandLineRunner {
     private final SubscriptionSeeder subscriptionSeeder;
     @Override
     public void run(String... args) throws Exception {
-//        privilegeSeeder.seed();
-//        roleSeeder.seed();
-//        subscriptionSeeder.seed();
-//        chatBotSeeder.seed();
+        privilegeSeeder.seed();
+        roleSeeder.seed();
+        subscriptionSeeder.seed();
+        chatBotSeeder.seed();
     }
 }

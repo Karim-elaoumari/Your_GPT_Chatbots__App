@@ -152,7 +152,6 @@ class ChatBotServiceImplTest {
     void deleteChatBot_Success() {
         UUID chatbotId = UUID.randomUUID();
         doNothing().when(chatBotRepository).deleteById(chatbotId);
-
         assertDoesNotThrow(() -> chatBotService.deleteChatBot(chatbotId));
         verify(chatBotRepository, times(1)).deleteById(chatbotId);
     }

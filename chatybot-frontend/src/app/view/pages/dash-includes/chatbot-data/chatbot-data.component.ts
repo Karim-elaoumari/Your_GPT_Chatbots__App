@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Data } from '@angular/router';
+import { ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BotData } from 'src/app/core/models/BotData';
 import { BotTextdata } from 'src/app/core/models/BotTextData';
@@ -86,6 +87,7 @@ export class ChatbotDataComponent {
   addTextData(){
     if(this.new_text_data != '' && this.new_text_data.length > 200){
       this.error = '';
+      console.log(this.new_text_data);
       this.success = 'Adding text data...';
       this.loading = true;
       let text_data:BotTextdata = {
@@ -101,9 +103,19 @@ export class ChatbotDataComponent {
             this.new_text_data = '';
             this.loading = false;
           }else if(loading == LoadingStatus.ERROR){
-            this.error = 'Error adding text data';
-            this.success = '';
-            this.loading = false;
+            this.store.select(getDataErrorSelector).subscribe(
+              (error:any) => {
+                console.log(error);
+                if(error.error.message!=''){
+                 
+                  this.success = '';
+                  this.error = error.error.message;
+                }else if(error!=null && error.length>0){
+                  this.success = '';
+                  this.error = error;
+                }
+              }
+            );
           }
         }
       );
@@ -128,9 +140,19 @@ export class ChatbotDataComponent {
             this.dropzoneFile.nativeElement.value = '';
             this.fileName = '';
           }else if(loading == LoadingStatus.ERROR){
-            this.error = 'Error adding file data';
-            this.success = '';
-            this.loading = false;
+            this.store.select(getDataErrorSelector).subscribe(
+              (error:any) => {
+                console.log(error);
+                if(error.error.message!=''){
+                 
+                  this.success = '';
+                  this.error = error.error.message;
+                }else if(error!=null && error.length>0){
+                  this.success = '';
+                  this.error = error;
+                }
+              }
+            );
           }
         }
       );

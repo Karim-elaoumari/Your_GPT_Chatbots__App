@@ -13,12 +13,13 @@ import { AccountComponent } from './view/pages/dash-includes/account/account.com
 import { NewChatbotComponent } from './view/pages/dash-includes/new-chatbot/new-chatbot.component';
 import { RouteNotFoundPageComponent } from './view/pages/route-not-found-page/route-not-found-page.component';
 import { InternalServerErrorComponent } from './view/pages/internal-server-error/internal-server-error.component';
+import { AuthenticatedGuard } from './core/guards/authenticated.guard';
 
 const routes: Routes = [
   { path: '',   redirectTo: '/home', pathMatch: 'full'},
   {path:'home', component: HomeComponent},
-  {path: 'login',component: LoginComponent},
-  { path: 'register', component: RegisterComponent},
+  {path: 'login',component: LoginComponent, canActivate: [AuthenticatedGuard]},
+  { path: 'register', component: RegisterComponent, canActivate: [AuthenticatedGuard]},
   { path: 'chatbots',component: ChatbotsComponent, canActivate: [AuthGuard,RolesGuard],data: {expectedRoles: ['ADMIN','USER']} ,children: [
     { path: 'chatbots-list',component: ChatbotsListComponent},
     { path: 'chatbot-details/:ch',component: ChatbotDetailsComponent},
