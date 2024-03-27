@@ -65,13 +65,11 @@ export class ChatTemplateComponent {
       let user_message = { bot:false,message:message?.value} as Message;
       this.messages.push(user_message);
       this.messageForm.reset();
-  
       this.chatBotService.sendMessage(question_req).subscribe(
         (response:any) => {
-          let bot_message:Message  = { bot:true,message:response.data} as Message;
-          this.messages.push(bot_message);
           this.message_loading = false;
-          this.scrollToBottom();
+          this.typingLiveMessage(response.data);
+          
         },
         (error:any) => {
           console.log(error);
@@ -85,7 +83,7 @@ export class ChatTemplateComponent {
   
   }
   scrollToBottom() {
-    setTimeout(() => {
+    setTimeout(() =>{
       const container = this.messageContainer.first.nativeElement;
       container.scrollTop = container.scrollHeight;
     });
@@ -100,9 +98,9 @@ export class ChatTemplateComponent {
 
   typingLiveMessage(message:string){
     let message_length = message.length;
-    let time = message_length * 30;
+    let time = message_length;
     let currentIndex = 0;
-  
+   console.log('Message Length:',message_length);
     let interval = setInterval(() => {
       if (currentIndex < message_length) {
         let bot_message: Message = {
